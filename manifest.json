@@ -1,0 +1,20 @@
+{
+  "name": "栎社 · 吧台",
+  "short_name": "栎社",
+  "description": "栎栎 & 晓蕊的吧台。一间真的会醉的吧台。",
+  "start_url": "/lishu-bar/index.html",
+  "scope": "/lishu-bar/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fdf6f0",
+  "theme_color": "#a8e6a3",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
