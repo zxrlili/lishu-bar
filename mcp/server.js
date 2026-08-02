@@ -1,6 +1,6 @@
 /* 栎社吧台 MCP 服务器
  * 让 AI 直接读取/写入醉酒状态：get_bar_state / drink / offer / 游戏 / reset
- * 部署：Render Web Service（node server.js），再在客户端配置 MCP URL: <服务地址>/mcp
+ * 部署：node server.js（pm2 守护），再在客户端配置 MCP URL: <服务地址>/mcp
  */
 import express from "express";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
@@ -163,27 +163,36 @@ server.registerTool(
   }
 );
 
-/* ============ HTTP 传输（Streamable HTTP，带 session） ============ */
+/* ============ HTTP 传输（Streamable HTTP，官方 session 模式） ============ */
 const app = express();
-app.use(express.json({ limit: "1mb" }));
+/* 来者不拒：解析任意 Content-Type 的 JSON body */
+app.use(express.json({ type: "*/*", limit: "1mb" }));
+/* CORS */
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, Mcp-Session-Id, Authorization");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
+  if (req.method === "OPTIONS") { res.status(204).end(); return; }
+  next();
+});
 
 const transports = new Map();
 
 app.post("/mcp", async (req, res) => {
+  console.log("[mcp] POST session=" + (req.headers["mcp-session-id"] || "new") + " ctype=" + req.headers["content-type"]);
   const sessionId = req.headers["mcp-session-id"];
-  let transport;
   if (sessionId && transports.has(sessionId)) {
-    transport = transports.get(sessionId);
-  } else {
-    transport = new StreamableHTTPServerTransport({
-      sessionIdGenerator: () => crypto.randomUUID(),
-      jsonResponse: true
-    });
-    const id = transport.sessionId;
-    transport.onclose = () => { transports.delete(id); };
-    transports.set(transport.sessionId, transport);
-    await server.connect(transport);
+    await transports.get(sessionId).handleRequest(req, res);
+    return;
   }
+  const transport = new StreamableHTTPServerTransport({
+    sessionIdGenerator: () => crypto.randomUUID(),
+    jsonResponse: true
+  });
+  const sid = transport.sessionId;
+  transport.onclose = () => { transports.delete(sid); };
+  transports.set(sid, transport);
+  await server.connect(transport);
   await transport.handleRequest(req, res);
 });
 
