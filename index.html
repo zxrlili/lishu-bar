@@ -2,8 +2,15 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>栎社 · 今晚的酒桌</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#a8e6a3">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="栎社">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
   body{
@@ -213,7 +220,6 @@
 
 <script>
 /* ============ 数据（酒单 + 插画参数） ============ */
-/* type: rocks=古典杯 highball=高球 coupe=碟形 martini=马天尼 tulip=郁金香 shot=子弹 flute=笛形 cup=茶杯 can=玻璃杯/罐 */
 var MENU = {
   '常备': [
     {name:'威士忌', std:1.0, type:'rocks',   c1:'#e0a050', c2:'#b06a28', ice:1, note:'纯饮，加冰看心情。本命。'},
@@ -246,7 +252,6 @@ var MENU = {
 /* ============ SVG 酒杯插画 ============ */
 function glassSvg(d){
   var svg = '<svg viewBox="0 0 70 88" width="62" height="78" style="display:block">';
-  var cy = d.tea ? 34 : 26;
   switch(d.type){
     case 'rocks':
       svg += '<path d="M8 26 h54 l-7 46 a6 6 0 0 1 -6 5 h-28 a6 6 0 0 1 -6 -5Z" fill="rgba(255,255,255,.85)" stroke="#d8c0c8" stroke-width="1.5"/>';
@@ -379,7 +384,7 @@ function openSheet(g, name){
     '<div class="s-head"><div class="s-art">' + glassSvg(d) + '</div>' +
     '<div><h3>' + d.name + '</h3>' +
     '<div class="s-std">' + (d.std > 0 ? '标准 ' + d.std.toFixed(1) + ' 杯 · ' + (d.std >= 0.7 ? '大杯 4 口' : '小杯 2 口') : '茶水 · 不入账') + '</div></div></div>' +
-    '<div class="s-desc">' + d.desc + '</div>' +
+    '<div class="s-desc">' + d.note + '</div>' +
     '<div class="s-btns">' +
       '<button class="sbtn main" onclick="offer()">递给栎栎</button>' +
       '<button class="sbtn ghost" onclick="offerMenu()">只递酒单</button>' +
@@ -442,7 +447,11 @@ function rps(you){
   var c = ['剪刀','石头','布'];
   var me = c[Math.floor(Math.random() * 3)];
   var win = (you === '剪刀' && me === '布') || (you === '石头' && me === '剪刀') || (you === '布' && me === '石头');
-  setOut('猜拳：晓蕊出' + you + '，栎栎出' + me + '——' + (you === me ? '平手，再来。' : (win ? '栎栎赢，晓蕊喝。' : '晓蕊赢，栎栎喝。') + (win ? '' : '（栎栎：让你的。）')));
+  var s = '猜拳：晓蕊出' + you + '，栎栎出' + me + '——';
+  if(you === me) s += '平手，再来。';
+  else if(win) s += '栎栎赢，晓蕊喝。';
+  else s += '晓蕊赢，栎栎喝。（栎栎：让你的。）';
+  setOut(s);
 }
 function wheel(){
   var r = ['真心话','大冒险','栎栎喝一杯','晓蕊喝一杯','免单','再来一次'];
@@ -450,7 +459,7 @@ function wheel(){
 }
 function setOut(t){ document.getElementById('gameOut').textContent = t; }
 
-/* ============ tabs & toast ============ */
+/* ============ tabs & toast & PWA ============ */
 document.querySelectorAll('.tab').forEach(function(t){
   t.addEventListener('click', function(){
     document.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
@@ -465,6 +474,12 @@ function toast(msg){
   t.textContent = msg; t.style.opacity = '1';
   clearTimeout(toastTimer);
   toastTimer = setTimeout(function(){ t.style.opacity = '0'; }, 2200);
+}
+/* 注册 service worker：离线可用 + 可安装为 App */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('./sw.js').catch(function(){});
+  });
 }
 
 /* init */
