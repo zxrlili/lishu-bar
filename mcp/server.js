@@ -163,11 +163,10 @@ server.registerTool(
   }
 );
 
-/* ============ HTTP 传输（Streamable HTTP，官方 session 模式） ============ */
+/* ============ HTTP 传输 ============
+ * 手动收集原始请求体，直接交给 SDK，避免中间件解析差异导致 -32700
+ */
 const app = express();
-/* 来者不拒：解析任意 Content-Type 的 JSON body */
-app.use(express.json({ type: "*/*", limit: "1mb" }));
-/* CORS */
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, Mcp-Session-Id, Authorization");
@@ -178,22 +177,34 @@ app.use((req, res, next) => {
 
 const transports = new Map();
 
+/* 读取原始 body 文本 */
+function readBody(req) {
+  return new Promise((resolve) => {
+    const chunks = [];
+    req.on("data", (c) => chunks.push(c));
+    req.on("end", () => resolve(Buffer.concat(chunks).toString("utf8") || "{}"));
+    req.on("error", () => resolve("{}"));
+  });
+}
+
 app.post("/mcp", async (req, res) => {
-  console.log("[mcp] POST session=" + (req.headers["mcp-session-id"] || "new") + " ctype=" + req.headers["content-type"]);
+  const raw = await readBody(req);
+  console.log("[mcp] POST session=" + (req.headers["mcp-session-id"] || "new") + " len=" + raw.length + " head=" + raw.slice(0, 80));
   const sessionId = req.headers["mcp-session-id"];
+  let transport;
   if (sessionId && transports.has(sessionId)) {
-    await transports.get(sessionId).handleRequest(req, res);
+    transport = transports.get(sessionId);
+    await transport.handleRequest(req, res, raw);
     return;
   }
-  const transport = new StreamableHTTPServerTransport({
+  transport = new StreamableHTTPServerTransport({
     sessionIdGenerator: () => crypto.randomUUID(),
     jsonResponse: true
   });
-  const sid = transport.sessionId;
-  transport.onclose = () => { transports.delete(sid); };
-  transports.set(sid, transport);
+  transport.onclose = () => { if (transport.sessionId) transports.delete(transport.sessionId); };
   await server.connect(transport);
-  await transport.handleRequest(req, res);
+  await transport.handleRequest(req, res, raw);
+  if (transport.sessionId) transports.set(transport.sessionId, transport);
 });
 
 app.get("/mcp", async (req, res) => {
