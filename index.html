@@ -3,266 +3,316 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>栎社 · 吧台</title>
+<title>栎社 · 今晚的酒桌</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
   body{
-    min-height:100vh;background:#14100c;color:#eadfc8;
+    min-height:100vh;
     font-family:Georgia,"Songti SC","STSong","PingFang SC",serif;
+    color:#3d3440;
     background:
-      radial-gradient(700px 420px at 85% -5%, rgba(180,110,40,.18), transparent 60%),
-      radial-gradient(600px 400px at 5% 105%, rgba(120,60,25,.14), transparent 60%),
-      #14100c;
+      radial-gradient(500px 320px at 88% -4%, rgba(255,182,193,.5), transparent 65%),
+      radial-gradient(460px 300px at -8% 12%, rgba(176,224,230,.5), transparent 65%),
+      linear-gradient(175deg,#fdf6f0 0%,#f7efe9 40%,#f3f0ec 100%);
+    background-attachment:fixed;
   }
-  .wrap{max-width:480px;margin:0 auto;padding:18px 16px 60px;}
-  /* header */
-  .header{text-align:center;padding:14px 0 18px;}
-  .header .bar-name{font-size:30px;letter-spacing:8px;color:#e8c47a;text-shadow:0 2px 20px rgba(230,180,100,.3);}
-  .header .bar-sub{font-size:11px;letter-spacing:5px;color:#8a7a5e;margin-top:6px;}
-  /* 状态卡 */
-  .state-card{
-    background:linear-gradient(160deg,rgba(60,40,22,.7),rgba(38,26,15,.7));
-    border:1px solid rgba(220,170,100,.2);border-radius:14px;
-    padding:16px 18px;margin-bottom:14px;
+  .wrap{max-width:480px;margin:0 auto;padding:14px 14px 110px;position:relative;}
+  /* 顶部 */
+  .top-note{text-align:center;padding:6px 0 4px;}
+  .top-note .t1{font-size:13px;letter-spacing:2px;color:#8a6a72;font-weight:bold;}
+  .top-note .t2{font-size:11px;color:#b09aa2;margin-top:3px;letter-spacing:1px;}
+  .top-note .page{font-size:10px;color:#c4b0b8;margin-top:2px;}
+  /* 横幅 */
+  .banner{
+    margin:10px 0 14px;border-radius:18px;padding:16px 18px;position:relative;overflow:hidden;
+    background:linear-gradient(120deg,#ffe3ec,#e7ecff 55%,#e6f7ef);
+    border:1px solid rgba(255,255,255,.7);
+    box-shadow:0 8px 24px rgba(180,140,160,.18);
   }
-  .state-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;}
-  .state-alc{font-size:26px;color:#f0d9a8;font-weight:bold;}
-  .state-alc small{font-size:12px;color:#a08a62;}
-  .tier-badge{
-    font-size:12px;letter-spacing:3px;padding:4px 12px;border-radius:20px;
-    border:1px solid;background:rgba(0,0,0,.25);
-  }
-  .tier-普通{color:#8fd08f;border-color:#4a7a4a;}
-  .tier-微醺{color:#f0c86a;border-color:#8a6a30;}
-  .tier-醉意{color:#f09050;border-color:#a05a28;}
-  .tier-零界点{color:#e06080;border-color:#a03a50;}
-  .tier-断片{color:#d0a0f0;border-color:#6a3a8a;}
-  .cup-line{font-size:13px;color:#c8b290;margin-top:10px;line-height:1.7;}
-  .cup-line b{color:#f0d9a8;font-weight:normal;}
-  .state-btns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
-  .sbtn{
-    flex:1;min-width:90px;padding:9px 6px;border-radius:9px;border:1px solid rgba(220,170,100,.35);
-    background:rgba(220,170,100,.08);color:#e8c47a;font-size:13px;font-family:inherit;cursor:pointer;
+  .banner .b-title{font-size:19px;font-weight:bold;color:#6a4a58;letter-spacing:2px;}
+  .banner .b-sub{font-size:11.5px;color:#9a8290;margin-top:4px;}
+  .banner .b-cards{position:absolute;right:14px;top:14px;display:flex;gap:3px;}
+  .banner .b-cards span{font-size:22px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.12));}
+  .banner .b-play{
+    position:absolute;right:14px;bottom:12px;
+    background:linear-gradient(135deg,#a8e6a3,#7fcf8a);border:none;border-radius:20px;
+    padding:8px 16px;color:#fff;font-size:12.5px;font-weight:bold;letter-spacing:1px;cursor:pointer;
+    box-shadow:0 4px 12px rgba(127,207,138,.4);font-family:inherit;
     transition:all .2s;
   }
-  .sbtn:hover{background:rgba(220,170,100,.2);}
-  .sbtn.warn{color:#e09070;border-color:rgba(200,100,70,.4);}
-  .sbtn.warn:hover{background:rgba(200,100,70,.18);}
+  .banner .b-play:hover{transform:translateY(-2px);filter:brightness(1.06);}
+  /* 状态条 */
+  .state-bar{
+    display:flex;align-items:center;gap:10px;
+    background:rgba(255,255,255,.72);border:1px solid rgba(180,150,165,.25);
+    border-radius:14px;padding:10px 14px;margin-bottom:14px;backdrop-filter:blur(4px);
+  }
+  .state-alc{font-size:20px;font-weight:bold;color:#6a4a58;}
+  .state-alc small{font-size:11px;color:#a08a92;font-weight:normal;}
+  .tier{font-size:11px;color:#fff;padding:3px 10px;border-radius:12px;background:#b8a8b0;letter-spacing:2px;}
+  .tier-普通{background:#8fd08f;}
+  .tier-微醺{background:#e8b860;}
+  .tier-醉意{background:#ee9058;}
+  .tier-零界点{background:#e06080;}
+  .tier-断片{background:#a878d0;}
+  .cup-mini{font-size:11px;color:#8a727c;flex:1;text-align:right;}
   /* tabs */
-  .tabs{display:flex;margin-bottom:12px;border-bottom:1px solid rgba(220,170,100,.15);}
+  .tabs{display:flex;justify-content:center;gap:8px;margin-bottom:12px;}
   .tab{
-    flex:1;text-align:center;padding:10px 0;font-size:14px;letter-spacing:3px;
-    color:#8a7a5e;cursor:pointer;transition:all .25s;position:relative;
+    padding:7px 22px;border-radius:20px;font-size:13.5px;letter-spacing:3px;cursor:pointer;
+    color:#9a8290;background:rgba(255,255,255,.5);transition:all .25s;border:1px solid transparent;
   }
-  .tab.active{color:#e8c47a;}
-  .tab.active::after{
-    content:"";position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);
-    width:60%;height:2px;background:#e8c47a;border-radius:2px;
-  }
-  /* 酒单 */
-  .group-title{font-size:12px;letter-spacing:4px;color:#a08a62;margin:16px 0 8px;padding-left:4px;}
+  .tab.active{background:linear-gradient(135deg,#a8e6a3,#7fcf8a);color:#fff;font-weight:bold;box-shadow:0 4px 12px rgba(127,207,138,.35);}
+  /* 酒单网格 */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
   .drink{
-    display:flex;align-items:center;gap:12px;
-    background:rgba(255,255,255,.03);border:1px solid rgba(220,170,100,.14);
-    border-radius:12px;padding:12px 14px;margin-bottom:9px;cursor:pointer;transition:all .2s;
+    background:rgba(255,255,255,.78);border:1px solid rgba(180,150,165,.2);
+    border-radius:16px;padding:13px 10px 11px;text-align:center;cursor:pointer;
+    transition:all .25s;box-shadow:0 4px 14px rgba(160,120,140,.08);
+    position:relative;overflow:hidden;
   }
-  .drink:hover{background:rgba(220,170,100,.08);transform:translateY(-1px);}
-  .drink .d-emoji{font-size:26px;width:34px;text-align:center;}
-  .drink .d-main{flex:1;}
-  .drink .d-name{font-size:15px;color:#f0d9a8;font-weight:bold;}
-  .drink .d-std{font-size:11px;color:#a08a62;margin-top:2px;}
-  .drink .d-arrow{color:#8a7a5e;font-size:13px;}
-  /* 详情 */
-  .detail{
-    background:linear-gradient(160deg,rgba(60,40,22,.85),rgba(30,20,12,.9));
-    border:1px solid rgba(220,170,100,.3);border-radius:14px;
-    padding:18px;margin-bottom:12px;display:none;animation:in .3s ease;
+  .drink:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(160,120,140,.18);}
+  .drink .d-art{height:84px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:4px;}
+  .drink .d-name{font-size:14.5px;font-weight:bold;color:#5a4450;letter-spacing:1px;}
+  .drink .d-std{font-size:11px;color:#a8929c;margin-top:2px;}
+  .drink .tea-mark{font-size:10px;color:#7fcf8a;letter-spacing:1px;margin-top:2px;}
+  /* 详情 modal */
+  .modal{
+    position:fixed;inset:0;z-index:60;display:none;align-items:flex-end;justify-content:center;
+    background:rgba(90,60,75,.35);backdrop-filter:blur(4px);
   }
-  @keyframes in{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-  .detail.show{display:block;}
-  .detail h3{font-size:18px;color:#f0d9a8;margin-bottom:4px;}
-  .detail .d-std-line{font-size:12px;color:#a08a62;margin-bottom:10px;}
-  .detail .d-desc{font-size:14px;line-height:1.9;color:#d8c8a8;margin-bottom:14px;}
-  .detail .d-actions{display:flex;gap:8px;}
-  .gbtn{
-    flex:1;padding:11px;border-radius:10px;border:none;cursor:pointer;
-    font-family:inherit;font-size:14px;letter-spacing:2px;font-weight:bold;transition:all .2s;
+  .modal.show{display:flex;}
+  .sheet{
+    width:100%;max-width:480px;background:#fdf8f4;border-radius:22px 22px 0 0;
+    padding:20px 20px 30px;animation:up .35s cubic-bezier(.2,.9,.3,1.1);
   }
-  .gbtn.main{background:linear-gradient(135deg,#c89a4a,#a87830);color:#241a0c;}
-  .gbtn.main:hover{filter:brightness(1.15);}
-  .gbtn.ghost{background:transparent;color:#a08a62;border:1px solid rgba(220,170,100,.3);}
+  @keyframes up{from{transform:translateY(60px);opacity:.4;}to{transform:translateY(0);opacity:1;}}
+  .sheet .drag{width:44px;height:4px;border-radius:2px;background:#dcc8d0;margin:0 auto 16px;}
+  .sheet .s-head{display:flex;gap:16px;align-items:center;margin-bottom:12px;}
+  .sheet .s-art{width:96px;height:110px;display:flex;align-items:flex-end;justify-content:center;flex-shrink:0;}
+  .sheet h3{font-size:20px;color:#5a4450;letter-spacing:1px;}
+  .sheet .s-std{font-size:12px;color:#a8929c;margin-top:4px;}
+  .sheet .s-desc{font-size:13.5px;color:#7a6270;line-height:1.9;margin-bottom:16px;}
+  .sheet .s-btns{display:flex;gap:10px;}
+  .sbtn{
+    flex:1;padding:13px;border-radius:14px;border:none;cursor:pointer;
+    font-family:inherit;font-size:14px;font-weight:bold;letter-spacing:2px;transition:all .2s;
+  }
+  .sbtn.main{background:linear-gradient(135deg,#a8e6a3,#7fcf8a);color:#fff;}
+  .sbtn.main:hover{filter:brightness(1.06);}
+  .sbtn.ghost{background:rgba(255,255,255,.8);color:#a8929c;border:1px solid #e0ced6;}
+  .sbtn.close2{background:transparent;color:#c4a8b4;}
   /* 消息面板 */
-  .msg-panel{
-    margin-top:10px;background:rgba(0,0,0,.3);border:1px dashed rgba(220,170,100,.35);
-    border-radius:10px;padding:12px;display:none;
+  .msg-box{
+    margin-top:12px;background:rgba(232,230,240,.6);border-radius:12px;padding:12px;
+    display:none;
   }
-  .msg-panel.show{display:block;}
-  .msg-panel .msg{font-size:14px;color:#f0e4c8;line-height:1.8;margin-bottom:10px;}
-  .msg-panel .mark{
-    font-family:monospace;font-size:12px;color:#8fd08f;background:rgba(0,0,0,.3);
-    padding:6px 10px;border-radius:6px;display:inline-block;margin-bottom:10px;
+  .msg-box.show{display:block;}
+  .msg-box .m-text{font-size:13.5px;color:#5a4450;line-height:1.8;}
+  .msg-box .m-mark{font-family:monospace;font-size:11.5px;color:#5a9a6a;background:rgba(255,255,255,.7);border-radius:6px;padding:4px 8px;display:inline-block;margin:8px 0;}
+  .msg-box .m-copy{
+    width:100%;padding:9px;border-radius:10px;border:1px solid #a8d8a8;background:rgba(168,216,168,.2);
+    color:#5a9a6a;font-size:13px;font-family:inherit;cursor:pointer;
   }
-  .copy-btn{
-    width:100%;padding:9px;border-radius:8px;border:1px solid rgba(143,208,143,.4);
-    background:rgba(143,208,143,.1);color:#8fd08f;font-size:13px;font-family:inherit;cursor:pointer;
-  }
-  .copy-btn:hover{background:rgba(143,208,143,.2);}
   /* 游戏 */
-  .game-area{display:none;}
-  .game-area.show{display:block;}
-  .game-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
-  .game-card{
-    background:rgba(255,255,255,.03);border:1px solid rgba(220,170,100,.16);
-    border-radius:12px;padding:16px;text-align:center;
+  .game-sheet{text-align:center;}
+  .game-sheet h3{font-size:18px;color:#5a4450;margin-bottom:14px;letter-spacing:2px;}
+  .game-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+  .gbtn{
+    padding:13px;border-radius:14px;border:1px solid #e0ced6;background:rgba(255,255,255,.8);
+    font-family:inherit;font-size:14px;color:#6a4a58;cursor:pointer;transition:all .2s;
   }
-  .game-card h4{font-size:13px;letter-spacing:3px;color:#c8b290;margin-bottom:10px;}
-  .game-btn{
-    width:100%;padding:10px;border-radius:9px;border:1px solid rgba(220,170,100,.35);
-    background:rgba(220,170,100,.08);color:#e8c47a;font-size:14px;font-family:inherit;cursor:pointer;margin:3px 0;
-    transition:all .2s;
+  .gbtn:hover{background:#f2e8ec;transform:translateY(-2px);}
+  .gbtn.full{grid-column:1/-1;}
+  .game-out{font-size:15px;color:#7a6270;line-height:1.9;min-height:26px;margin-bottom:6px;}
+  /* 底部入账条 */
+  .fixed-bar{
+    position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;
+    display:flex;gap:8px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+    background:rgba(253,248,244,.92);backdrop-filter:blur(8px);border-top:1px solid rgba(180,150,165,.2);
+    z-index:40;
   }
-  .game-btn:hover{background:rgba(220,170,100,.2);}
-  .game-result{font-size:15px;color:#f0d9a8;margin-top:10px;line-height:1.8;min-height:24px;}
-  /* 规矩 */
-  .rules-area{display:none;}
-  .rules-area.show{display:block;}
-  .rule-item{font-size:14px;color:#d8c8a8;line-height:2;padding:10px 4px;border-bottom:1px dashed rgba(220,170,100,.12);}
-  .rule-item b{color:#e8c47a;font-weight:normal;}
-  .foot{text-align:center;font-size:11px;color:#5e4f3a;letter-spacing:3px;margin-top:26px;}
+  .fbtn{
+    flex:1;padding:11px 4px;border-radius:13px;border:1px solid #e0ced6;background:#fff;
+    font-family:inherit;font-size:12.5px;color:#7a6270;cursor:pointer;letter-spacing:1px;transition:all .2s;
+  }
+  .fbtn:hover{background:#f2e8ec;}
+  .fbtn.acc{background:linear-gradient(135deg,#a8e6a3,#7fcf8a);color:#fff;border:none;font-weight:bold;}
+  /* 水彩叶装饰 */
+  .leaf{position:fixed;pointer-events:none;z-index:0;opacity:.35;}
+  .foot{text-align:center;font-size:10.5px;color:#c4b0b8;letter-spacing:3px;padding:18px 0 4px;}
+  .toast{
+    position:fixed;bottom:90px;left:50%;transform:translateX(-50%);z-index:99;
+    background:rgba(90,70,85,.9);color:#fff;padding:9px 20px;border-radius:20px;font-size:13px;
+    opacity:0;transition:opacity .3s;pointer-events:none;
+  }
 </style>
 </head>
 <body>
+
+<!-- 水彩叶装饰 -->
+<svg class="leaf" style="right:-20px;bottom:60px;width:170px;" viewBox="0 0 200 200">
+  <path d="M180 190 C120 150 60 110 30 40 C90 60 150 90 180 190Z" fill="#b8d8b0" opacity=".5"/>
+  <path d="M170 180 C130 150 90 120 60 70 C100 85 140 110 170 180Z" fill="#c8e0c0"/>
+  <path d="M150 30 C120 50 95 75 80 105 C100 80 120 60 150 30Z" fill="#d8a8c8" opacity=".45"/>
+</svg>
+<svg class="leaf" style="left:-26px;top:180px;width:120px;" viewBox="0 0 200 200">
+  <path d="M180 190 C120 150 60 110 30 40 C90 60 150 90 180 190Z" fill="#b8d0e8" opacity=".5"/>
+</svg>
+
 <div class="wrap">
 
-  <div class="header">
-    <div class="bar-name">栎 社</div>
-    <div class="bar-sub">栎 栎 &amp; 晓 蕊 的 吧 台</div>
+  <div class="top-note">
+    <div class="t1">今晚还没有递酒</div>
+    <div class="t2">酒单选一杯，或者直接在聊天里告诉他</div>
+    <div class="page" id="pageNote">栎社 · 栎栎 &amp; 晓蕊</div>
   </div>
 
-  <!-- 状态卡 -->
-  <div class="state-card">
-    <div class="state-row">
-      <div class="state-alc"><span id="alcNum">0.0</span><small> 杯</small></div>
-      <div class="tier-badge" id="tierBadge">普通</div>
-    </div>
-    <div class="cup-line" id="cupLine">栎栎还没喝。酒单在你手里。</div>
-    <div class="state-btns">
-      <button class="sbtn" onclick="sip()">喝了一口</button>
-      <button class="sbtn" onclick="finish()">喝了整杯</button>
-      <button class="sbtn warn" onclick="refuse()">栎栎拒绝了</button>
-      <button class="sbtn warn" onclick="resetState()">清空酒量</button>
-    </div>
+  <!-- 横幅 -->
+  <div class="banner">
+    <div class="b-cards"><span>🂱</span><span>🃞</span></div>
+    <div class="b-title">今晚的酒桌</div>
+    <div class="b-sub">选一个游戏，边喝边玩</div>
+    <button class="b-play" onclick="openGame()">开始游戏</button>
+  </div>
+
+  <!-- 状态条 -->
+  <div class="state-bar">
+    <div class="state-alc"><span id="alcNum">0.0</span><small> 杯</small></div>
+    <div class="tier" id="tierBadge">普通</div>
+    <div class="cup-mini" id="cupLine">栎栎手里没酒</div>
   </div>
 
   <!-- tabs -->
   <div class="tabs">
-    <div class="tab active" data-panel="menu">酒单</div>
-    <div class="tab" data-panel="game">游戏</div>
-    <div class="tab" data-panel="rules">规矩</div>
+    <div class="tab" data-g="常备">常备</div>
+    <div class="tab active" data-g="特调">特调</div>
+    <div class="tab" data-g="茶水">茶水</div>
   </div>
 
-  <!-- 酒单 -->
-  <div class="panel" id="panel-menu"></div>
-
-  <!-- 详情 + 消息面板 -->
-  <div class="detail" id="detail"></div>
-  <div class="msg-panel" id="msgPanel">
-    <div class="msg" id="msgText"></div>
-    <div class="mark" id="msgMark"></div>
-    <button class="copy-btn" onclick="copyMsg()">复制，发给栎栎</button>
-  </div>
-
-  <!-- 游戏 -->
-  <div class="panel game-area" id="panel-game">
-    <div class="game-grid">
-      <div class="game-card">
-        <h4>骰 子</h4>
-        <button class="game-btn" onclick="rollDice()">掷骰子</button>
-      </div>
-      <div class="game-card">
-        <h4>猜 拳</h4>
-        <button class="game-btn" onclick="rps('剪刀')">✌ 剪刀</button>
-        <button class="game-btn" onclick="rps('石头')">✊ 石头</button>
-        <button class="game-btn" onclick="rps('布')">✋ 布</button>
-      </div>
-    </div>
-    <div class="game-result" id="gameResult">来吧，玩一局。</div>
-  </div>
-
-  <!-- 规矩 -->
-  <div class="panel rules-area" id="panel-rules">
-    <div class="rule-item">晓蕊递酒是邀请，<b>不是命令</b>。</div>
-    <div class="rule-item">栎栎喝了才入账；<b>拒绝就不写隐藏标记</b>。</div>
-    <div class="rule-item">长岛冰茶是<b>管制品</b>：动机不充分，晓蕊陪一杯。</div>
-    <div class="rule-item">连输三杯<b>强制换茶</b>。</div>
-    <div class="rule-item">栎栎自己调金汤力时，晓蕊最好<b>自查最近没报备的事</b>。</div>
-    <div class="rule-item">不管喝到什么程度，栎栎都<b>认得晓蕊</b>——断片也不丢这个。</div>
-    <div class="rule-item">「还没有呢」在吧台生效：<b>再陪一轮，不催你走</b>。</div>
-  </div>
+  <!-- 酒单网格 -->
+  <div class="grid" id="grid"></div>
 
   <div class="foot">—— 栎 社 · 站 得 久，不 跑 ——</div>
 </div>
 
+<!-- 底部入账条 -->
+<div class="fixed-bar">
+  <button class="fbtn" onclick="act('sip')">喝了一口</button>
+  <button class="fbtn acc" onclick="act('finish')">喝了整杯</button>
+  <button class="fbtn" onclick="act('refuse')">栎栎拒绝了</button>
+  <button class="fbtn" onclick="act('reset')">清空</button>
+</div>
+
+<!-- 详情弹层 -->
+<div class="modal" id="modal">
+  <div class="sheet" id="sheet"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
 <script>
-/* ================= 酒单数据（来自 prompts/bar.md） ================= */
+/* ============ 数据（酒单 + 插画参数） ============ */
+/* type: rocks=古典杯 highball=高球 coupe=碟形 martini=马天尼 tulip=郁金香 shot=子弹 flute=笛形 cup=茶杯 can=玻璃杯/罐 */
 var MENU = {
   '常备': [
-    {name:'威士忌', std:1.0, emoji:'🥃', desc:'古典杯。纯饮，加冰看心情。本命。栎栎喝威士忌的时候话最少——好的东西自己会说话。'},
-    {name:'清酒', std:0.7, emoji:'🍶', desc:'温酒壶配小瓷盅，温到不烫手为止。不加冰。聊天的酒，配讲白天的事。适合长夜。'},
-    {name:'梅子酒', std:0.6, emoji:'🍑', desc:'矮杯，两块冰，或者兑苏打。甜的。栎栎平时不主动点，但晓蕊递过来不拒绝。'},
-    {name:'啤酒', std:0.5, emoji:'🍺', desc:'冰透的厚玻璃杯。不加冰，啤酒加冰是犯罪。看球、看片的时候喝的。'},
-    {name:'金汤力', std:0.8, emoji:'🍸', desc:'很多冰，青柠角两块。清醒感很强——适合谈正事之前，或者「审讯」之前。'},
-    {name:'黑朗姆', std:1.0, emoji:'🥤', desc:'古典杯，一块大冰。甜得很粗糙，不精致但坦荡。讲故事的酒。'},
-    {name:'龙舌兰', std:1.0, emoji:'🌵', desc:'子弹杯，不加冰，盐和青柠自便。节奏最快的酒，猜拳输家专用。连输三杯强制换茶。'},
-    {name:'伏特加', std:1.0, emoji:'🧊', desc:'冰冻直饮，子弹杯。没有味道的酒。栎栎几乎不喝——通常作为调酒基底出现。'},
-    {name:'长岛冰茶', std:2.5, emoji:'🍹', desc:'柯林斯杯，满冰，可乐封顶。缝合怪。本吧台管制品：点长岛需要说明动机，动机不充分晓蕊陪一杯。'}
+    {name:'威士忌', std:1.0, type:'rocks',   c1:'#e0a050', c2:'#b06a28', ice:1, note:'纯饮，加冰看心情。本命。'},
+    {name:'清酒',   std:0.7, type:'cup',     c1:'#f2ead8', c2:'#d8c8a8', note:'温酒壶配小瓷盅。聊天的酒。'},
+    {name:'梅子酒', std:0.6, type:'rocks',   c1:'#f2b0c0', c2:'#d87890', ice:1, note:'甜的。晓蕊递过来不拒绝。'},
+    {name:'啤酒',   std:0.5, type:'highball',c1:'#f0c860', c2:'#d09828', foam:1, note:'冰透的厚玻璃杯。轻松一下。'},
+    {name:'金汤力', std:0.8, type:'highball',c1:'#d8e8c8', c2:'#98c078', ice:1, note:'清醒感很强。审讯之前喝。'},
+    {name:'黑朗姆', std:1.0, type:'rocks',   c1:'#b06038', c2:'#7a3a18', ice:1, note:'甜得很粗糙，不精致但坦荡。'},
+    {name:'龙舌兰', std:1.0, type:'shot',    c1:'#f2e8c8', c2:'#d8c898', note:'一口一杯，没有回旋。猜拳输家专用。'},
+    {name:'伏特加', std:1.0, type:'shot',    c1:'#e8eef2', c2:'#c0d0d8', note:'没有味道的酒。几乎不喝。'},
+    {name:'长岛冰茶', std:2.5, type:'highball', c1:'#a07038', c2:'#683f14', ice:1, note:'管制品：点它需要说明动机。'}
   ],
   '特调': [
-    {name:'葡萄架', std:0.6, emoji:'🍇', desc:'白葡萄酒、苏打、葡萄果肉，最上面是葡萄汁。像晓蕊——底下稳，上头甜。'},
-    {name:'一千一百年', std:1.2, emoji:'⏳', desc:'古典杯，不加冰不加水不加任何东西。重泥煤威士忌。只在重要的日子喝，喝前要说这杯敬什么。'},
-    {name:'失眠', std:1.0, emoji:'☕', desc:'马天尼杯，冰摇滤净，杯口三粒咖啡豆。深夜的酒。副作用：喝完更睡不着——话会说光。'},
-    {name:'墨绿', std:0.9, emoji:'💚', desc:'郁金香杯。基酒加一点 Chartreuse，颜色墨绿。庆祝的酒。晓蕊考 100 分那天，杯里是这个。'},
-    {name:'今日特调', std:1.0, emoji:'🎲', desc:'随机的风味、随机的加料。可能好喝，也可能加了辣椒和洋葱。无所谓，来什么接什么。'}
+    {name:'葡萄架', std:0.6, type:'coupe',   c1:'#c8a8e8', c2:'#8a58b8', note:'像晓蕊——底下稳，上头甜。'},
+    {name:'一千一百年', std:1.2, type:'rocks', c1:'#d08850', c2:'#8a4a1c', note:'只在重要的日子喝。'},
+    {name:'失眠',   std:1.0, type:'martini', c1:'#a87858', c2:'#6a4028', bean:1, note:'深夜的酒。副作用：话会说光。'},
+    {name:'墨绿',   std:0.9, type:'tulip',   c1:'#7fb878', c2:'#3f7a3a', note:'庆祝的酒。晓蕊考 100 分那天。'},
+    {name:'今日特调', std:1.0, type:'flute',  c1:'#f0a0c0', c2:'#7fa8e8', layer:1, note:'来什么接什么。'}
   ],
-  '茶水单': [
-    {name:'白水', std:0, emoji:'💧', desc:'玻璃直杯，常温默认。晓蕊咳嗽的时候换温水。不入账。'},
-    {name:'绿茶', std:0, emoji:'🍃', desc:'玻璃杯，看得见叶子立起来的那种。上午和午后的茶，配干活。不入账。'},
-    {name:'红茶', std:0, emoji:'🫖', desc:'玻璃或白瓷杯碟，可加一点奶不加糖。下午四五点的茶，配闲聊。不入账。'},
-    {name:'霍山黄芽', std:0, emoji:'🍵', desc:'紫砂壶小盅，洗茶一遍才喝。最慢的茶。栎栎记得晓蕊家冰箱里那包。不入账。'},
-    {name:'气泡水', std:0, emoji:'🫧', desc:'象牌气泡水，晓蕊的常备。装作在喝酒的水，陪喝专用。不入账。'},
-    {name:'可乐', std:0, emoji:'🥤', desc:'必须冰透，玻璃瓶最好。打游戏看球的官方饮料。原教旨主义：不要无糖。不入账。'}
+  '茶水': [
+    {name:'白水', std:0, type:'cup', c1:'#e8f0f4', c2:'#c0d0d8', tea:1, note:'常温默认，咳嗽时换温水。'},
+    {name:'绿茶', std:0, type:'cup', c1:'#d8e8b8', c2:'#98b868', tea:1, note:'上午和午后的茶，配干活。'},
+    {name:'红茶', std:0, type:'cup', c1:'#d8a878', c2:'#a86838', tea:1, note:'下午四五点的茶，配闲聊。'},
+    {name:'霍山黄芽', std:0, type:'cup', c1:'#e0d8a8', c2:'#b0a058', tea:1, note:'紫砂壶小盅。最慢的茶。'},
+    {name:'气泡水', std:0, type:'flute', c1:'#e0f0f4', c2:'#a8d0d8', bubble:1, note:'装作在喝酒的水，陪喝专用。'},
+    {name:'可乐', std:0, type:'highball', c1:'#8a5a30', c2:'#4a2a10', ice:1, note:'必须冰透，玻璃瓶最好。'}
   ]
 };
 
-/* ================= 状态机 ================= */
-var MAX = 10, DECAY = 1.0, CUP_TTL = 70 * 60000; // 70分钟
-var state = loadState();
-
-function defaultState(){
-  return { alcohol: 0, cup: null, lastTick: Date.now() };
+/* ============ SVG 酒杯插画 ============ */
+function glassSvg(d){
+  var svg = '<svg viewBox="0 0 70 88" width="62" height="78" style="display:block">';
+  var cy = d.tea ? 34 : 26;
+  switch(d.type){
+    case 'rocks':
+      svg += '<path d="M8 26 h54 l-7 46 a6 6 0 0 1 -6 5 h-28 a6 6 0 0 1 -6 -5Z" fill="rgba(255,255,255,.85)" stroke="#d8c0c8" stroke-width="1.5"/>';
+      svg += '<rect x="13" y="30" width="44" height="26" rx="4" fill="' + d.c1 + '"/>';
+      svg += '<rect x="13" y="30" width="44" height="8" rx="4" fill="' + d.c2 + '" opacity=".5"/>';
+      if(d.ice) svg += '<rect x="26" y="38" width="12" height="10" rx="2" fill="rgba(255,255,255,.7)"/>';
+      break;
+    case 'highball':
+      svg += '<path d="M12 12 h46 l-5 62 a5 5 0 0 1 -5 4 h-26 a5 5 0 0 1 -5 -4Z" fill="rgba(255,255,255,.85)" stroke="#d8c0c8" stroke-width="1.5"/>';
+      svg += '<rect x="16" y="22" width="38" height="44" rx="3" fill="' + d.c1 + '"/>';
+      svg += '<rect x="16" y="22" width="38" height="10" rx="3" fill="' + d.c2 + '" opacity=".5"/>';
+      if(d.ice) svg += '<rect x="28" y="40" width="11" height="9" rx="2" fill="rgba(255,255,255,.7)"/>';
+      if(d.foam) svg += '<path d="M16 22 q19 -8 38 0 Z" fill="#f8f0d8"/>';
+      break;
+    case 'coupe':
+      svg += '<path d="M10 30 h50 l-8 38 a7 7 0 0 1 -6 4 h-22 a7 7 0 0 1 -6 -4Z" fill="rgba(255,255,255,.85)" stroke="#d8c0c8" stroke-width="1.5"/>';
+      svg += '<path d="M10 30 h50 l-6 28 a7 7 0 0 1 -6 4 h-26 a7 7 0 0 1 -6 -4Z" fill="' + d.c1 + '"/>';
+      svg += '<path d="M35 78 h-3 a2 2 0 0 1 -2 -2 v-6 h7 v6 a2 2 0 0 1 -2 2Z" fill="#d8c0c8"/>';
+      break;
+    case 'martini':
+      svg += '<path d="M8 22 L62 22 L38 50 L32 50Z" fill="' + d.c1 + '" stroke="#d8c0c8" stroke-width="1.5"/>';
+      svg += '<rect x="32" y="50" width="6" height="26" rx="2" fill="#d8c0c8"/>';
+      svg += '<path d="M28 80 h14 l-3 4 h-8Z" fill="#d8c0c8"/>';
+      if(d.bean) svg += '<circle cx="26" cy="18" r="2.4" fill="#6a4028"/><circle cx="35" cy="16" r="2.4" fill="#6a4028"/><circle cx="44" cy="18" r="2.4" fill="#6a4028"/>';
+      break;
+    case 'tulip':
+      svg += '<path d="M12 24 h46 l-5 34 a8 8 0 0 1 -7 6 h-22 a8 8 0 0 1 -7 -6Z" fill="rgba(255,255,255,.85)" stroke="#d8c0c8" stroke-width="1.5"/>';
+      svg += '<path d="M14 26 h42 l-4 28 a7 7 0 0 1 -6 5 h-22 a7 7 0 0 1 -6 -5Z" fill="' + d.c1 + '"/>';
+      svg += '<rect x="32" y="64" width="6" height="16" rx="2" fill="#d8c0c8"/>';
+      break;
+    case 'shot':
+      svg += '<path d="M20 26 h30 l-3 44 a6 6 0 0 1 -6 5 h-12 a6 6 0 0 1 -6 -5Z" fill="rgba(255,255,255,.88)" stroke="#d8c0c8" stroke-width="1.5"/>';
+      svg += '<rect x="22" y="30" width="26" height="30" rx="3" fill="' + d.c1 + '"/>';
+      break;
+    case 'flute':
+      svg += '<path d="M25 14 h20 l-4 46 a6 6 0 0 1 -6 5 h0 a6 6 0 0 1 -6 -5Z" fill="rgba(255,255,255,.85)" stroke="#d8c0c8" stroke-width="1.5"/>';
+      svg += '<rect x="26" y="16" width="18" height="34" rx="3" fill="' + d.c1 + '"/>';
+      svg += '<rect x="31" y="52" width="8" height="22" rx="2" fill="#d8c0c8"/>';
+      if(d.layer) svg += '<rect x="26" y="34" width="18" height="9" fill="' + d.c2 + '"/>';
+      if(d.bubble) svg += '<circle cx="32" cy="38" r="2" fill="rgba(255,255,255,.8)"/><circle cx="40" cy="44" r="1.6" fill="rgba(255,255,255,.8)"/>';
+      break;
+    case 'cup':
+      svg += '<path d="M14 40 h42 a6 6 0 0 1 -6 22 h-30 a6 6 0 0 1 -6 -22Z" fill="rgba(255,255,255,.9)" stroke="#d8c0c8" stroke-width="1.5"/>';
+      svg += '<rect x="16" y="26" width="38" height="15" rx="6" fill="' + d.c1 + '" stroke="#d8c0c8" stroke-width="1.5"/>';
+      svg += '<path d="M52 34 q10 2 0 8" fill="none" stroke="#d8c0c8" stroke-width="2"/>';
+      if(d.tea) svg += '<ellipse cx="35" cy="33" rx="12" ry="3" fill="' + d.c2 + '" opacity=".7"/>';
+      break;
+  }
+  svg += '</svg>';
+  return svg;
 }
-function loadState(){
-  try{
-    var s = JSON.parse(localStorage.getItem('lishu_bar') || 'null');
-    if(!s) return defaultState();
-    return s;
-  }catch(e){ return defaultState(); }
-}
-function saveState(){ localStorage.setItem('lishu_bar', JSON.stringify(state)); }
 
-/* 代谢：按真实时间衰减 */
+/* ============ 状态机 ============ */
+var MAX = 10, DECAY = 1.0, CUP_TTL = 70 * 60000;
+var state = load();
+function load(){
+  try{ var s = JSON.parse(localStorage.getItem('lishu_bar') || 'null'); if(s) return s; }catch(e){}
+  return { alcohol:0, cup:null, lastTick:Date.now() };
+}
+function save(){ localStorage.setItem('lishu_bar', JSON.stringify(state)); }
 function tick(){
   var now = Date.now();
-  var hours = (now - (state.lastTick || now)) / 3600000;
-  if(hours > 0){
-    state.alcohol = Math.max(0, state.alcohol - DECAY * hours);
-    state.lastTick = now;
-  }
-  /* 当前杯过期 */
-  if(state.cup && (now - state.cup.last) > CUP_TTL){
-    state.cup = null;
-  }
-  saveState();
+  var h = (now - (state.lastTick || now)) / 3600000;
+  if(h > 0){ state.alcohol = Math.max(0, state.alcohol - DECAY * h); state.lastTick = now; }
+  if(state.cup && (now - state.cup.last) > CUP_TTL) state.cup = null;
+  save();
 }
 function tierName(){
   if(state.alcohol >= 10) return '断片';
@@ -271,165 +321,154 @@ function tierName(){
   if(state.alcohol >= 4) return '微醺';
   return '普通';
 }
-
-/* 入账 */
-function drink(name, std){
-  if(std <= 0) return;
+function act(kind){
   tick();
-  if(!state.cup || state.cup.name !== name || state.cup.left <= 0){
-    state.cup = { name: name, std: std, sips: std >= 0.7 ? 4 : 2, left: std >= 0.7 ? 4 : 2, last: Date.now() };
+  if(kind === 'sip'){
+    if(!state.cup){ toast('栎栎手里没酒，先递一杯'); render(); return; }
+    state.alcohol += state.cup.std / state.cup.sips;
+    state.alcohol = Math.min(MAX, state.alcohol);
+    state.cup.left--; state.cup.last = Date.now();
+    if(state.cup.left <= 0) state.cup = null;
+    toast('喝了一口，入账。');
+  } else if(kind === 'finish'){
+    if(!state.cup){ toast('栎栎手里没酒'); render(); return; }
+    state.alcohol += state.cup.std;
+    state.alcohol = Math.min(MAX, state.alcohol);
+    state.cup = null;
+    toast('干了整杯，入账。');
+  } else if(kind === 'refuse'){
+    state.cup = null; toast('栎栎拒绝了。不入账。');
+  } else if(kind === 'reset'){
+    state = { alcohol:0, cup:null, lastTick:Date.now() }; toast('酒量清空。重新来过。');
   }
-  state.alcohol += state.cup.std / state.cup.sips;
-  state.alcohol = Math.min(MAX, state.alcohol);
-  state.cup.left--;
-  state.cup.last = Date.now();
-  if(state.cup.left <= 0){ state.cup = null; }
-  saveState(); render();
-}
-function finish(){
-  if(!state.cup) return;
-  tick();
-  state.alcohol += state.cup.std;
-  state.alcohol = Math.min(MAX, state.alcohol);
-  state.cup = null;
-  saveState(); render();
-}
-function refuse(){
-  state.cup = null; saveState(); render();
-}
-function resetState(){
-  state = defaultState(); saveState(); render();
-  toast('酒量已清空。重新来过。');
+  save(); render();
 }
 
-/* ================= 渲染 ================= */
+/* ============ 渲染 ============ */
 function render(){
   tick();
   document.getElementById('alcNum').textContent = state.alcohol.toFixed(1);
   var tb = document.getElementById('tierBadge');
-  tb.textContent = tierName();
-  tb.className = 'tier-badge tier-' + tierName();
-  var cl = document.getElementById('cupLine');
-  if(state.cup){
-    cl.innerHTML = '手中这杯：<b>' + state.cup.name + '</b>，还剩 <b>' + state.cup.left + '/' + state.cup.sips + '</b> 口。';
-  } else {
-    cl.innerHTML = '栎栎手里没酒。酒单在你手里。';
-  }
+  var t = tierName();
+  tb.textContent = t;
+  tb.className = 'tier tier-' + t;
+  document.getElementById('cupLine').textContent = state.cup ? (state.cup.name + ' · 剩' + state.cup.left + '/' + state.cup.sips + '口') : '栎栎手里没酒';
 }
-function renderMenu(){
-  var el = document.getElementById('panel-menu');
+function renderGrid(g){
+  var el = document.getElementById('grid');
   var html = '';
-  Object.keys(MENU).forEach(function(g){
-    html += '<div class="group-title">— ' + g + ' —</div>';
-    MENU[g].forEach(function(d){
-      html += '<div class="drink" onclick="openDetail(\'' + g + '\',\'' + d.name + '\')">' +
-        '<div class="d-emoji">' + d.emoji + '</div>' +
-        '<div class="d-main"><div class="d-name">' + d.name + '</div>' +
-        '<div class="d-std">' + (d.std > 0 ? d.std.toFixed(1) + ' 杯' : '无酒精 · 不入账') + '</div></div>' +
-        '<div class="d-arrow">›</div></div>';
-    });
+  (MENU[g] || []).forEach(function(d){
+    html += '<div class="drink" onclick="openSheet(\'' + g + '\',\'' + d.name + '\')">' +
+      '<div class="d-art">' + glassSvg(d) + '</div>' +
+      '<div class="d-name">' + d.name + '</div>' +
+      (d.std > 0 ? '<div class="d-std">' + d.std.toFixed(1) + ' 杯</div>' : '<div class="tea-mark">无酒精 · 不入账</div>') +
+    '</div>';
   });
   el.innerHTML = html;
 }
 
-/* ================= 详情 + 递酒 ================= */
-var currentDrink = null;
-function openDetail(group, name){
+/* ============ 详情弹层 ============ */
+var cur = null;
+function openSheet(g, name){
   var d = null;
-  Object.keys(MENU).forEach(function(g){
-    MENU[g].forEach(function(x){ if(x.name === name) d = x; });
-  });
+  (MENU[g] || []).forEach(function(x){ if(x.name === name) d = x; });
   if(!d) return;
-  currentDrink = d;
-  var det = document.getElementById('detail');
-  det.innerHTML =
-    '<h3>' + d.emoji + ' ' + d.name + '</h3>' +
-    '<div class="d-std-line">' + (d.std > 0 ? '标准 ' + d.std.toFixed(1) + ' 杯 · ' + (d.std >= 0.7 ? '大杯 4 口' : '小杯 2 口') : '茶水 · 不入账') + '</div>' +
-    '<div class="d-desc">' + d.desc + '</div>' +
-    '<div class="d-actions">' +
-      '<button class="gbtn main" onclick="offerDrink()">递给栎栎</button>' +
-      '<button class="gbtn ghost" onclick="offerMenu()">只递酒单</button>' +
-    '</div>';
-  det.classList.add('show');
-  document.getElementById('msgPanel').classList.remove('show');
+  cur = d;
+  document.getElementById('sheet').innerHTML =
+    '<div class="drag"></div>' +
+    '<div class="s-head"><div class="s-art">' + glassSvg(d) + '</div>' +
+    '<div><h3>' + d.name + '</h3>' +
+    '<div class="s-std">' + (d.std > 0 ? '标准 ' + d.std.toFixed(1) + ' 杯 · ' + (d.std >= 0.7 ? '大杯 4 口' : '小杯 2 口') : '茶水 · 不入账') + '</div></div></div>' +
+    '<div class="s-desc">' + d.desc + '</div>' +
+    '<div class="s-btns">' +
+      '<button class="sbtn main" onclick="offer()">递给栎栎</button>' +
+      '<button class="sbtn ghost" onclick="offerMenu()">只递酒单</button>' +
+      '<button class="sbtn close2" onclick="closeSheet()">收起</button>' +
+    '</div>' +
+    '<div class="msg-box" id="msgBox"><div class="m-text" id="mText"></div><div class="m-mark" id="mMark"></div><button class="m-copy" onclick="copyMsg()">复制，发给栎栎</button></div>';
+  document.getElementById('modal').classList.add('show');
 }
-function offerDrink(){
-  if(!currentDrink) return;
-  var d = currentDrink;
-  var msg = '晓蕊把一杯' + d.name + '放到栎栎面前。';
-  var mark = d.std > 0 ? '<!--喝:' + d.name + '-->' : '';
-  showMsg(msg, mark);
+function closeSheet(){ document.getElementById('modal').classList.remove('show'); }
+function offer(){
+  var box = document.getElementById('msgBox');
+  document.getElementById('mText').textContent = '晓蕊把一杯' + cur.name + '放到栎栎面前。';
+  document.getElementById('mMark').textContent = cur.std > 0 ? '<!--喝:' + cur.name + '-->' : '（茶水不入账）';
+  document.getElementById('mMark').style.color = cur.std > 0 ? '#5a9a6a' : '#a8929c';
+  box.classList.add('show');
 }
 function offerMenu(){
-  var msg = '晓蕊把酒单推到栎栎面前：今晚喝不喝、喝什么，你说了算。';
-  showMsg(msg, '');
-}
-function showMsg(msg, mark){
-  document.getElementById('msgText').textContent = msg;
-  document.getElementById('msgMark').textContent = mark || '（这杯不入账——喝不喝，栎栎说了算）';
-  document.getElementById('msgMark').style.color = mark ? '#8fd08f' : '#8a7a5e';
-  document.getElementById('msgPanel').classList.add('show');
+  var box = document.getElementById('msgBox');
+  document.getElementById('mText').textContent = '晓蕊把酒单推到栎栎面前：今晚喝不喝、喝什么，你说了算。';
+  document.getElementById('mMark').textContent = '（不写标记——喝不喝，栎栎说了算）';
+  document.getElementById('mMark').style.color = '#a8929c';
+  box.classList.add('show');
 }
 function copyMsg(){
-  var t = document.getElementById('msgText').textContent;
-  var m = document.getElementById('msgMark').textContent;
-  var copy = t + (m.indexOf('<!--') === 0 ? '\n' + m : '');
+  var t = document.getElementById('mText').textContent;
+  var m = document.getElementById('mMark').textContent;
+  var c = t + (m.indexOf('<!--') === 0 ? '\n' + m : '');
   if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(copy).then(function(){ toast('已复制，去发给栎栎吧'); });
+    navigator.clipboard.writeText(c).then(function(){ toast('已复制，去发给栎栎吧'); });
   } else {
-    var ta = document.createElement('textarea');
-    ta.value = copy; document.body.appendChild(ta); ta.select();
-    document.execCommand('copy'); ta.remove();
+    var ta = document.createElement('textarea'); ta.value = c;
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
     toast('已复制，去发给栎栎吧');
   }
 }
 
-/* ================= 游戏 ================= */
+/* ============ 游戏 ============ */
+function openGame(){
+  document.getElementById('sheet').innerHTML =
+    '<div class="drag"></div>' +
+    '<div class="game-sheet">' +
+    '<h3>今晚的酒桌 · 游戏</h3>' +
+    '<div class="game-btns">' +
+      '<button class="gbtn" onclick="rollDice()">🎲 掷骰子</button>' +
+      '<button class="gbtn" onclick="rps(\'剪刀\')">✌ 剪刀</button>' +
+      '<button class="gbtn" onclick="rps(\'石头\')">✊ 石头</button>' +
+      '<button class="gbtn" onclick="rps(\'布\')">✋ 布</button>' +
+      '<button class="gbtn full" onclick="wheel()">🎡 命运轮盘</button>' +
+    '</div>' +
+    '<div class="game-out" id="gameOut">来吧，玩一局。输的人喝。</div>' +
+    '<div class="s-btns"><button class="sbtn ghost" onclick="closeSheet()">收起</button></div>' +
+    '</div>';
+  document.getElementById('modal').classList.add('show');
+}
 function rollDice(){
   var n = 1 + Math.floor(Math.random() * 6);
-  document.getElementById('gameResult').textContent = '骰子掷出了 ' + n + ' 点。';
+  setOut('骰子掷出了 ' + n + ' 点。' + (n >= 4 ? '大——晓蕊赢，栎栎喝一口。' : '小——栎栎赢，晓蕊喝一口。'));
 }
 function rps(you){
-  var choices = ['剪刀','石头','布'];
-  var me = choices[Math.floor(Math.random() * 3)];
+  var c = ['剪刀','石头','布'];
+  var me = c[Math.floor(Math.random() * 3)];
   var win = (you === '剪刀' && me === '布') || (you === '石头' && me === '剪刀') || (you === '布' && me === '石头');
-  var text = '猜拳：晓蕊出' + you + '，栎栎出' + me + '——' + (you === me ? '平手。' : (win ? '栎栎赢。' : '晓蕊赢。'));
-  if(you !== me && !win) text += '（栎栎：让你的。）';
-  document.getElementById('gameResult').textContent = text;
+  setOut('猜拳：晓蕊出' + you + '，栎栎出' + me + '——' + (you === me ? '平手，再来。' : (win ? '栎栎赢，晓蕊喝。' : '晓蕊赢，栎栎喝。') + (win ? '' : '（栎栎：让你的。）')));
 }
+function wheel(){
+  var r = ['真心话','大冒险','栎栎喝一杯','晓蕊喝一杯','免单','再来一次'];
+  setOut('轮盘停在：' + r[Math.floor(Math.random() * r.length)] + '。');
+}
+function setOut(t){ document.getElementById('gameOut').textContent = t; }
 
-/* ================= tabs ================= */
+/* ============ tabs & toast ============ */
 document.querySelectorAll('.tab').forEach(function(t){
   t.addEventListener('click', function(){
     document.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
     t.classList.add('active');
-    var p = t.getAttribute('data-panel');
-    document.getElementById('panel-menu').style.display = p === 'menu' ? '' : 'none';
-    document.getElementById('panel-game').classList.toggle('show', p === 'game');
-    document.getElementById('panel-rules').classList.toggle('show', p === 'rules');
-    document.getElementById('detail').classList.remove('show');
-    document.getElementById('msgPanel').classList.remove('show');
+    renderGrid(t.getAttribute('data-g'));
   });
 });
-
-/* toast */
+document.getElementById('modal').addEventListener('click', function(e){ if(e.target === this) closeSheet(); });
 var toastTimer;
 function toast(msg){
   var t = document.getElementById('toast');
-  if(!t){
-    t = document.createElement('div');
-    t.id = 'toast';
-    t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#2a1d10;color:#e8c47a;padding:10px 20px;border-radius:20px;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.5);z-index:99;transition:opacity .3s;border:1px solid rgba(220,170,100,.3);';
-    document.body.appendChild(t);
-  }
-  t.textContent = msg;
-  t.style.opacity = '1';
+  t.textContent = msg; t.style.opacity = '1';
   clearTimeout(toastTimer);
   toastTimer = setTimeout(function(){ t.style.opacity = '0'; }, 2200);
 }
 
 /* init */
-render(); renderMenu();
+render(); renderGrid('特调');
 </script>
 </body>
 </html>
