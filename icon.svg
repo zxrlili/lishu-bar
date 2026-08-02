@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffe3ec"/>
+      <stop offset=".55" stop-color="#e7ecff"/>
+      <stop offset="1" stop-color="#e6f7ef"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f0c860"/>
+      <stop offset="1" stop-color="#d09828"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <!-- 栎树叶 -->
+  <path d="M96 430 C170 360 235 300 265 215 C300 285 330 335 396 392 C320 400 250 415 96 430Z" fill="#7fcf8a" opacity=".85"/>
+  <path d="M120 418 C180 360 228 310 250 240 C270 300 300 345 360 385 C300 392 240 402 120 418Z" fill="#a8e6a3" opacity=".8"/>
+  <!-- 酒杯 -->
+  <path d="M206 150 h100 l-14 130 a16 16 0 0 1 -15 12 h-42 a16 16 0 0 1 -15 -12Z" fill="rgba(255,255,255,.9)" stroke="#d8a8b8" stroke-width="10"/>
+  <path d="M214 172 h84 l-10 96 a12 12 0 0 1 -11 8 h-42 a12 12 0 0 1 -11 -8Z" fill="url(#glass)"/>
+  <!-- 月牙 -->
+  <path d="M312 96 a44 44 0 1 0 44 44 a34 34 0 1 1 -44 -44Z" fill="#e8b860"/>
+</svg>
